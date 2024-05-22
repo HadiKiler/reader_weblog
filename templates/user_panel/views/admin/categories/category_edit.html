@@ -1,0 +1,54 @@
+{% extends 'user_panel/views/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="card-body position-relative">
+    <div class="row g-0">
+        <div class="col-lg-8 pe-lg-2">
+          <div class="card mb-3">
+            <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="card-header">
+              <h5 class="mb-0">Edit Category</h5>
+            </div>
+            <div class="card-body bg-light">
+                <div class="col-lg-12">
+                    <label class="form-label" for="intro">Parent</label>
+                    <select class="form-select" id="organizerSingle" size="1" name="parent" data-options='{"removeItemButton":true,"placeholder":true}'>
+                      <option value="">-- None --</option>  
+                      {% for item in categories %}
+                        {% if item.parent == None %}
+                        <option value="{{item.id}}" {% if item == category.parent %}selected{% endif %}>{{item.name}}</option>
+                            {% for child in item.category_set.all %}
+                            <option value="{{child.id}}" {% if child == category.parent %}selected{% endif %}>- {{child.name}}</option>
+                                {% for grandchild in child.category_set.all %}
+                                <option value="{{grandchild.id}}" {% if grandchild == category.parent %}selected{% endif %}>- - {{grandchild.name}}</option>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-12 pt-2">
+                    <label class="form-label" for="first-name">Name</label>
+                    <input class="form-control" required name="name" id="first-name" type="text" value="{{category.name}}" />
+                  </div>
+                <div class="col-lg-12 pt-2">
+                  <label class="form-label" for="first-name">Image</label>
+                  <input class="form-control" name="image" id="first-name" type="file" />
+                </div>
+                <div class="col-12 d-flex justify-content-center mt-2">
+                  <button class="btn btn-primary" type="submit">Create</button>
+                </div>
+            </div>
+          </form>
+          </div>
+        </div>
+    
+      </div>
+    
+</div>
+
+{% endblock %}

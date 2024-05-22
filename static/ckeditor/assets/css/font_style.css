@@ -1,0 +1,47 @@
+@font-face {
+    font-family: "IRANSansX Medium";
+    src: url("../fonts/RranSansX/IRANSansXRegular.ttf");
+}
+
+@font-face {
+    font-family: "IRANSansX Bold";
+    src: url("../fonts/RranSansX/IRANSansXBold.ttf");
+}
+
+@font-face {
+    font-family: "IRANSansX ExtraBold";
+    src: url("../fonts/RranSansX/IRANSansXExtraBold.ttf");
+}
+
+@font-face {
+    font-family: "IRANSansX Light";
+    src: url("../fonts/RranSansX/IRANSansXLight.ttf");
+}
+
+@font-face {
+    font-family: "IRANSansX UltraThin";
+    src: url("../fonts/RranSansX/IRANSansXUltraLight.ttf");
+}
+
+.font-ultra-thin {
+    font-family: "IRANSansX UltraThin", serif;
+}
+
+.font-thin {
+    font-family: "IRANSansX Thin", serif;
+}
+
+.font-medium {
+    font-family: "IRANSansX Medium", serif;
+}
+
+.font-bold {
+    font-family: "IRANSansX Bold", serif;
+}
+
+.font-extra-bold {
+    font-family: "IRANSansX ExtraBold", serif;
+}
+
+
+

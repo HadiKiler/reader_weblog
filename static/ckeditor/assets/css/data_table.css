@@ -1,0 +1,22 @@
+table tr:hover {
+    background-color: rgba(81, 81, 81, 0.18) !important;
+}
+
+table tbody td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.39);
+}
+
+table tbody tr:focus-within,
+table tbody tr:focus-visible,
+table tbody tr:hover:is(:focus-visible),
+table tbody tr:hover:is(:focus-within) {
+    opacity: 1 !important;
+    background-color: #3636b5 !important;
+    color: #dedefd;
+}
+
+.dark-mode .dropdown-menu>li>a:hover,
+.dark-mode .dropdown-menu>li>a:focus {
+    color: white !important;
+    background-color: #3636b5 !important;
+}

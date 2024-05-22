@@ -1,0 +1,149 @@
+{% extends "blog/views/base.html" %}
+{% load static %}
+
+
+{% block content %}
+  
+  <section class="section-sm mt-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 mb-5 mb-lg-0">
+    <h2 class="h5 section-title">Recent Post</h2>
+  
+
+    {% for post in posts %}
+    <article class="card mb-4">
+      <div class="row card-body">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <div class="post-slider slider-sm">
+            <img src="{{post.image.url}}" class="card-img" alt="post-thumb" style="height:200px; object-fit: cover;">
+          </div>
+        </div>
+        <div class="col-md-8">
+          <h3 class="h4 mb-3"><a class="post-title" href="{% url 'blog_post_details' post.id %}">{{post.title}}</a></h3>
+          <ul class="card-meta list-inline">
+            <li class="list-inline-item">
+              <a href="" class="card-meta-author">
+                <img style="height: 30px;width: 30px;" src="{{post.user.image.url}}">
+                <span>{{post.user.username}}</span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+                <i class="ti-calendar"></i>{{ post.created_at | date:"M d Y"}}
+            </li>
+            <li class="list-inline-item">
+              <ul class="card-meta-tag list-inline">
+                {% for tag in post.tags.all %}
+                    <li class="list-inline-item"><a href="{% url 'blog_categories' %}?cat=&tag={{tag.id}}">{{tag.name}}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+          </ul>
+          <a href="{% url 'blog_post_details' post.id %}" class="btn btn-outline-primary mt-5">Read More</a>
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+    
+    <!-- <ul class="pagination justify-content-center">
+      <li class="page-item page-item active ">
+          <a href="#!" class="page-link">1</a>
+      </li>
+      <li class="page-item">
+          <a href="#!" class="page-link">2</a>
+      </li>
+      <li class="page-item">
+          <a href="#!" class="page-link">&raquo;</a>
+      </li>
+    </ul> -->
+  </div>
+        <aside class="col-lg-4 @@sidebar">
+    <!-- Search -->
+    <div class="widget">
+      <h4 class="widget-title"><span>Search</span></h4>
+      <form class="widget-search">
+        <input class="mb-3" id="search-query" name="search" type="search" placeholder="Type &amp; Hit Enter..." value="{{search}}">
+        <i class="ti-search"></i>
+        <button type="submit" class="btn btn-primary btn-block">Search</button>
+      </form>
+    </div>
+  
+    <!-- about me -->
+    <!-- <div class="widget widget-about">
+      <h4 class="widget-title">Hi, I am Alex!</h4>
+      <img class="img-fluid" src="images/author.jpg" alt="Themefisher">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vel in in donec iaculis tempus odio nunc laoreet . Libero ullamcorper.</p>
+      <ul class="list-inline social-icons mb-3">
+        
+        <li class="list-inline-item"><a href="#"><i class="ti-facebook"></i></a></li>
+        
+        <li class="list-inline-item"><a href="#"><i class="ti-twitter-alt"></i></a></li>
+        
+        <li class="list-inline-item"><a href="#"><i class="ti-linkedin"></i></a></li>
+        
+        <li class="list-inline-item"><a href="#"><i class="ti-github"></i></a></li>
+        
+        <li class="list-inline-item"><a href="#"><i class="ti-youtube"></i></a></li>
+        
+      </ul>
+      <a href="about-me.html" class="btn btn-primary mb-2">About me</a>
+    </div>
+     -->
+    
+    <!-- categories -->
+    <div class="widget widget-categories">
+        <h4 class="widget-title"><span>Categories</span></h4>
+        <ul class="list-unstyled widget-list">
+        {% for category in categories %}
+          <li style="{% if category.id == active_cat %}font-weight: bolder;{% endif %}"><a href="{{request.path}}?search={{search}}&cat={{category.id}}&tag={{active_tag}}">
+            {{category.name}} <small class="ml-auto">({{category.post_set.all | length}})</small>
+          </a></li>
+        {% endfor %}
+        </ul>
+      </div><!-- tags -->
+      <div class="widget">
+        <h4 class="widget-title"><span>Tags</span></h4>
+        <ul class="list-inline widget-list-inline widget-card">
+        {% for tag in tags %}
+          <li class="list-inline-item" style="{% if tag.id == active_tag %}font-weight: bolder;{% endif %}">
+            <a href="{{request.path}}?search={{search}}&cat={{active_cat}}&tag={{tag.id}}">{{tag.name}}</a>
+         </li>
+        {% endfor %}
+        </ul>
+    </div>
+    <div class="text-center mb-4">
+        <a href="{{request.path}}" class="btn btn-primary mx-auto">Clear Filters</a>
+    </div>
+
+     <!-- Promotion -->
+    <div class="promotion">
+      <img src="{% static 'blog/images/promotion.jpg' %}" class="img-fluid w-100">
+      <div class="promotion-content">
+        <h5 class="text-white mb-3">Create Stunning Website!!</h5>
+        <p class="text-white mb-4">Lorem ipsum dolor sit amet, consectetur sociis. Etiam nunc amet id dignissim. Feugiat id tempor vel sit ornare turpis posuere.</p>
+        <a href="https://themefisher.com/" class="btn btn-primary">Get Started</a>
+      </div>
+    </div>
+  
+    <!-- authors -->
+    <div class="widget widget-author">
+      <h4 class="widget-title">Authors</h4>
+      {% for bloger in popular_blogers %}
+      <div class="media align-items-center">
+        <div class="mr-3">
+          <img class="widget-author-image" src="{% if bloger.image %}{{bloger.image.url}}{% else %}{% static 'blog/images/user.jpg' %}{% endif %}">
+        </div>
+        <div class="media-body">
+          <h5 class="mb-1"><a class="post-title" href="">{{bloger.username}}</a></h5>
+          <span>{{bloger.bio}}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+   
+
+  </aside>
+      </div>
+    </div>
+  </section>
+{% endblock content %}

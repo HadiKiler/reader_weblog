@@ -1,0 +1,122 @@
+{% extends 'user_panel/views/base.html' %}
+{% load static %}
+
+{% block css %}
+<style>
+  /* Remove default bullets */
+ul, #myUL {
+  list-style-type: none;
+}
+
+/* Remove margins and padding from the parent ul */
+#myUL {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the caret/arrow */
+.caret {
+  cursor: pointer;
+  user-select: none; /* Prevent text selection */
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.caret::before {
+  content: "\25B6";
+  color: black;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+  transform: rotate(90deg);
+}
+
+/* Hide the nested list */
+.nested {
+  display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+  display: block;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="row flex-between-center">
+                <div class="col-sm-auto">
+                  <div class="row gx-2 align-items-center">
+                    <div class="col-auto">
+                      <a href="{% url 'user_panel_user_post_create' %}" class="btn btn-primary">New</a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-auto mb-2 mb-sm-0">
+                  <h6 class="mb-0">Showing {{ posts | length }} Products</h6>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="row">
+                {% for post in posts %}
+                <div class="my-4 mb-lg-0 col-md-6 col-lg-4">
+                  <div class="border rounded-1 h-100 d-flex flex-column justify-content-between pb-3">
+                    <div class="overflow-hidden">
+                      <div class="position-relative rounded-top overflow-hidden"><a class="d-block" href="{% url 'user_panel_user_post_edit' post.id %}"><img class="img-fluid rounded-top" src="{{ post.image.url }}" alt="" /></a>
+                      </div>
+                      <div class="p-3">
+                        <h5 class="fs-0"><a class="text-dark" href="{% url 'user_panel_user_post_edit' post.id %}">{{post.title}}</a></h5>
+                        <p class="fs--1 mb-3"><a class="text-500" href="#!">{{post.category}}</a></p>
+                        <p class="fs--1 mb-1">Published: <strong class="text-success">{{post.published}}</strong>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-around px-3">
+                        <div>
+                          <span class="fas fa-heart"></span><span class="ms-1">({{post.like_set.all | length}})</span>
+                        </div>
+                        <div>
+                          <span class="far fa-comment ml-5"></span><span class="ms-1">({{post.comment_set.all | length}})</span>
+                        </div>
+                        <div>
+                          <a href="{% url 'user_panel_user_post_delete' post.id %}">Delete <span class="fas fa-eraser ml-5"></span></a>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="card-footer bg-light d-flex justify-content-center">
+              <div>
+                <!-- <button class="btn btn-falcon-default btn-sm me-2" type="button" disabled="disabled" data-bs-toggle="tooltip" data-bs-placement="top" title="Prev"><span class="fas fa-chevron-left"></span></button><a class="btn btn-sm btn-falcon-default text-primary me-2" href="#!">1</a><a class="btn btn-sm btn-falcon-default me-2" href="#!">2</a><a class="btn btn-sm btn-falcon-default me-2" href="#!"> <span class="fas fa-ellipsis-h"></span></a><a class="btn btn-sm btn-falcon-default me-2" href="#!">35</a>
+                <button class="btn btn-falcon-default btn-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Next"><span class="fas fa-chevron-right">     </span></button> -->
+              </div>
+            </div>
+          </div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+var toggler = document.getElementsByClassName("caret");
+var i;
+
+for (i = 0; i < toggler.length; i++) {
+  toggler[i].addEventListener("click", function() {
+    this.parentElement.querySelector(".nested").classList.toggle("active");
+    this.classList.toggle("caret-down");
+  });
+}
+</script>
+{% endblock %}

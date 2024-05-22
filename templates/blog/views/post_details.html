@@ -1,0 +1,217 @@
+{% extends "blog/views/base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<section class="section">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class=" col-lg-9   mb-5 mb-lg-0">
+        <article>
+          <div class="post-slider mb-4">
+            <img src="{{post.image.url}}" class="card-img" alt="post-thumb">
+          </div>
+          
+          <h1 class="h2">{{post.title}}</h1>
+          <ul class="card-meta my-3 list-inline">
+            <li class="list-inline-item">
+              <a href="" class="card-meta-author">
+                <img style="width: 40px;height: 40px;" src="{{post.user.image.url}}">
+                <span>{{post.user.username}}</span>
+              </a>
+            </li>
+            <!-- <li class="list-inline-item">
+              <i class="ti-timer"></i>2 Min To Read
+            </li> -->
+            <li class="list-inline-item">
+              <i class="ti-calendar"></i>{{ post.created_at | date:"M d Y"}}
+            </li>
+            <li class="list-inline-item">
+              <ul class="card-meta-tag list-inline">
+                {% for tag in post.tags.all %}
+                    <li class="list-inline-item"><a href="{% url 'blog_categories' %}?cat=&tag={{tag.id}}">{{tag.name}}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+          </ul>
+          <div class="content">{{post.content | safe}}</div>
+        </article>
+        
+      </div>
+
+      <div class="col-lg-9 col-md-12">
+          <div class="mb-5 border-top mt-4 pt-5" id="comments">
+              <h3 class="mb-4">Comments</h3>
+
+              {% for comment in post.comment_set.all %}
+              {% if not comment.parent %}
+              <div class="media d-block d-sm-flex my-4 pb-4">
+                  <a class="media d-block d-sm-flex mb-4 pb-4" href="#">
+                      <img width="60px" height="60px" src="{% if comment.user %}{{comment.user.image.url}}{% else %}{% static 'blog/images/user.jpg'%}{% endif%}" class="mr-3 rounded-circle" alt="">
+                  </a>
+                  <div class="media-body w-100">
+                      <a href="" class="h4 d-inline-block mb-3">{{comment.user.username}}{{comment.name}}</a>
+                      <p style="word-wrap: break-word;">{{comment.content}}</p>
+                      <span class="text-black-800 mr-3 font-weight-600">{{comment.created_at}}</span>
+                      <a class="text-primary font-weight-600 btn-reply" href="#!" id="{{comment.id}}">Reply</a>
+                      <a href="{% url 'blog_post_comment_delete' post.id comment.id %}" class="text-danger ml-2">Delete</a>
+
+                  </div>
+              </div>
+              <div class="d-none m-5 text-reply" id="reply{{comment.id}}">
+                <h3 class="mb-4">Leave a Reply</h3>
+                <form method="POST" action="{{request.path}}{{comment.id}}/">
+                {% csrf_token %}
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <textarea class="form-control shadow-none" name="comment" rows="7" required></textarea>
+                        </div>
+                        {% if not user.is_authenticated %}
+                        <div class="form-group col-md-4">
+                            <input class="form-control shadow-none" type="text" name="name" placeholder="Name" required>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <input class="form-control shadow-none" type="email" name="email" placeholder="Email" required>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <button class="btn btn-primary" type="submit">Comment Now</button>
+                </form>
+              </div>
+                      {% for secondComment in comment.comment_set.all %}
+                      <div class="media d-block d-sm-flex mb-4 pb-4">
+                          <div class="media d-block d-sm-flex mb-4 pb-4" href="#">
+                              <img class="mr-3" src="{% static 'blog/images/post/arrow.png' %}" alt="">
+                              <a class="d-inline-block mr-2 mb-3 mb-md-0" href="#!">
+                                <img width="60px" height="60px" src="{% if secondComment.user %}{{secondComment.user.image.url}}{% else %}{% static 'blog/images/user.jpg'%}{% endif%}" class="mr-3 rounded-circle" alt="">
+                              </a>
+                          </div>
+                          <div class="media-body w-100">
+                              <a href="#!" class="h4 d-inline-block mb-3">{% if secondComment.user %}{{secondComment.user.username}}{% else %}{{secondComment.name}}{% endif%}</a>
+                              <p style="word-wrap: break-word;">{{secondComment.content}}</p>
+                              <span class="text-black-800 mr-3 font-weight-600">{{secondComment.created_at}}</span>
+                              <a class="text-primary font-weight-600 btn-reply" href="#!" id="{{secondComment.id}}">Reply</a>
+                              <a href="{% url 'blog_post_comment_delete' post.id secondComment.id %}" class="text-danger ml-2">Delete</a>
+
+                          </div>
+                      </div>
+                      <div class="d-none m-5 text-reply" id="reply{{secondComment.id}}">
+                        <h3 class="mb-4">Leave a Reply</h3>
+                        <form method="POST" action="{{request.path}}{{secondComment.id}}/">
+                        {% csrf_token %}
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <textarea class="form-control shadow-none" name="comment" rows="7" required></textarea>
+                                </div>
+                                {% if not user.is_authenticated %}
+                                <div class="form-group col-md-4">
+                                    <input class="form-control shadow-none" type="text" name="name" placeholder="Name" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <input class="form-control shadow-none" type="email" name="email" placeholder="Email" required>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <button class="btn btn-primary" type="submit">Comment Now</button>
+                        </form>
+                      </div>
+                              {% for thiredComment in secondComment.comment_set.all %}
+                              <div class="media d-block d-sm-flex pl-3">
+                                  <div class="media d-block d-sm-flex mb-4 pb-4" href="#">
+                                      <img class="mr-3 ml-5" src="{% static 'blog/images/post/arrow.png' %}" alt="">
+                                      <a class="d-inline-block mr-2 mb-3 mb-md-0" href="#!">
+                                        <img width="60px" height="60px" src="{% if thiredComment.user %}{{thiredComment.user.image.url}}{% else %}{% static 'blog/images/user.jpg'%}{% endif%}" class="mr-3 rounded-circle" alt="">
+                                      </a>
+                                  </div>
+                                  <div class="media-body w-100">
+                                      <a href="#!" class="h4 d-inline-block mb-3">{% if thiredComment.user %}{{thiredComment.user.username}}{% else %}{{thiredComment.name}}{% endif%}</a>
+                                      <p style="word-wrap: break-word;">{{thiredComment.content}}</p>
+                                      <span class="text-black-800 mr-3 font-weight-600">{{thiredComment.created_at}}</span>
+                                      <!-- <a class="text-primary font-weight-600 btn-reply" href="#!" id="{{thiredComment.id}}">Reply</a> -->
+                                      <a href="{% url 'blog_post_comment_delete' post.id thiredComment.id %}" class="text-danger ml-2">Delete</a>
+
+                                  </div>
+                              </div>
+                              <div class="d-none m-5 text-reply" id="reply{{thiredComment.id}}">
+                                <h3 class="mb-4">Leave a Reply</h3>
+                                <form method="POST" action="{{request.path}}{{thiredComment.id}}/">
+                                {% csrf_token %}
+                                    <div class="row">
+                                        <div class="form-group col-md-12">
+                                            <textarea class="form-control shadow-none" name="comment" rows="7" required></textarea>
+                                        </div>
+                                        {% if not user.is_authenticated %}
+                                        <div class="form-group col-md-4">
+                                            <input class="form-control shadow-none" type="text" name="name" placeholder="Name" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <input class="form-control shadow-none" type="email" name="email" placeholder="Email" required>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <button class="btn btn-primary" type="submit">Comment Now</button>
+                                </form>
+                              </div>
+
+                  {% endfor %}
+                {% endfor %}
+                {% endif %}
+              {% endfor %}
+          </div>
+
+          <div>
+            <h2 class="text-center my-3">Write your comment</h2>
+              <form method="POST" action="{% url 'blog_post_comment' post.id %}">
+                {% csrf_token %}  
+                <div class="row">
+                      <div class="form-group col-md-12">
+                          <textarea class="form-control shadow-none" name="comment" rows="10" required placeholder="write your comment here..."></textarea>
+                      </div>
+                      {% if not user.is_authenticated %}
+                      <div class="form-group col-md-4">
+                          <input class="form-control shadow-none" type="text" name="name" placeholder="Name" required>
+                      </div>
+                      <div class="form-group col-md-4">
+                          <input class="form-control shadow-none" type="email" name="email" placeholder="Email" required>
+                      </div>
+                      {% endif %}
+                  </div>
+                  <button class="btn btn-primary" type="submit">Comment Now</button>
+              </form>
+          </div>
+          <div class="text-center mt-5 pt-5" id="like">
+            {% if liked %}
+            <h2>Thank you for liking.</h2>
+            <a href="{% url 'blog_post_like' post.id %}">
+              <i style="font-size: 300px;" class="bi bi-heart-fill text-danger"></i>
+            </a>
+            {% else %}
+            <h2>Was it usefull? so Click here.</h2>
+            <a href="{% url 'blog_post_like' post.id %}">
+              <i style="font-size: 300px;" class="bi bi-heart text-danger"></i>
+            </a>
+            {% endif %}
+          </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<script>
+  let text_replies = document.querySelectorAll('.text-reply')
+  document.querySelectorAll('.btn-reply').forEach(e=>{
+    e.addEventListener('click',e=>{
+      text_replies.forEach(element=>{
+        element.classList.add('d-none')
+      })
+      document.getElementById('reply'+e.target.id).classList.remove('d-none')
+    })
+  })
+</script>
+{% endblock content %}

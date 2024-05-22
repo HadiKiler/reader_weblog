@@ -1,0 +1,126 @@
+{% extends 'user_panel/views/base.html' %}
+
+
+{% load static %}
+
+{% block css %}
+<link href="{% static 'user_panel/vendors/choices/choices.min.css' %}" rel="stylesheet" />
+<style>
+    .subCategory{
+        padding-left: 40px !important;
+    }
+    .extraCategory{
+        padding-left: 80px !important;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card-body position-relative">
+    <div class="row g-0">
+        <div class="col-lg-8 pe-lg-2">
+          <div class="card mb-3">
+            <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="card-header">
+              <h5 class="mb-0">Create Category</h5>
+            </div>
+            <div class="card-body bg-light">
+                <div class="col-lg-12">
+                    <label class="form-label" for="intro">Parent</label>
+                    <select class="form-select" id="organizerSingle" size="1" name="parent" data-options='{"removeItemButton":true,"placeholder":true}'>
+                      <option value="">-- None --</option>  
+                      {% for item in categories %}
+                        {% if item.parent == None %}
+                        <option value="{{item.id}}">{{item.name}}</option>
+                            {% for child in item.category_set.all %}
+                            <option value="{{child.id}}">- {{child.name}}</option>
+                                {% for grandchild in child.category_set.all %}
+                                <option value="{{grandchild.id}}">- - {{grandchild.name}}</option>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-12 pt-2">
+                    <label class="form-label" for="first-name">Name</label>
+                    <input class="form-control" required name="name" id="first-name" type="text" />
+                  </div>
+                <div class="col-lg-12 pt-2">
+                  <label class="form-label" for="first-name">Image</label>
+                  <input class="form-control" required name="image" id="first-name" type="file" />
+                </div>
+                <div class="col-12 d-flex justify-content-center mt-2">
+                  <button class="btn btn-primary" type="submit">Create</button>
+                </div>
+            </div>
+          </form>
+          </div>
+        </div>
+    
+      </div>
+    
+</div>
+
+
+
+<div class="table-responsive scrollbar">
+    <table class="table table-bordered border">
+      <thead>
+        <tr>
+            <th scope="col" style="width:10%;">Image</th>
+            <th scope="col">Name</th>
+          <th class="text-end" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for category in categories %}
+        {% if category.parent == None %}
+            <tr>
+            <td><img src="{{category.image.url}}" style="width: 50px;height:50px;border-radius: 50%;" alt=""></td>
+            <td>{{category.name}}</td>
+            <td class="text-end">
+                <div>
+                <a href="{% url 'user_panel_admin_category_edit' category.id %}"><button class="btn p-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><span class="text-500 fas fa-edit"></span></button></a>
+                <a href="{% url 'user_panel_admin_category_delete' category.id %}"><button  class="btn p-0 ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><span class="text-500 fas fa-trash-alt"></span></button></a>
+                </div>
+            </td>
+            </tr>
+            {% for subCategory in category.category_set.all %}
+                <tr>
+                    <td><img src="{{subCategory.image.url}}" style="width: 50px;height:50px;border-radius: 50%;" alt=""></td>
+                    <td class="subCategory">{{subCategory.name}}</td>
+                    <td class="text-end">
+                    <div>
+                        <a href="{% url 'user_panel_admin_category_edit' subCategory.id %}"><button class="btn p-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><span class="text-500 fas fa-edit"></span></button></a>
+                        <a href="{% url 'user_panel_admin_category_delete' subCategory.id %}"><button  class="btn p-0 ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><span class="text-500 fas fa-trash-alt"></span></button></a>
+                    </div>
+                    </td>
+                </tr>
+                {% for extraCategory in subCategory.category_set.all %}
+                    <tr>
+                        <td><img src="{{extraCategory.image.url}}" style="width: 50px;height:50px;border-radius: 50%;" alt=""></td>
+                        <td class="extraCategory">{{extraCategory.name}}</td>
+                        <td class="text-end">
+                        <div>
+                            <a href="{% url 'user_panel_admin_category_edit' extraCategory.id %}"><button class="btn p-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><span class="text-500 fas fa-edit"></span></button></a>
+                            <a href="{% url 'user_panel_admin_category_delete' extraCategory.id %}"><button  class="btn p-0 ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><span class="text-500 fas fa-trash-alt"></span></button></a>
+                        </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endblock %}
+
+
+{% block js %}
+<script src="{% static 'user_panel/vendors/choices/choices.min.js' %}"></script>
+{% endblock %}

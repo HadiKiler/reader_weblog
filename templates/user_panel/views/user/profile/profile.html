@@ -1,0 +1,82 @@
+{% extends 'user_panel/views/base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-3 btn-reveal-trigger">
+        <div class="card-header position-relative min-vh-25 mb-7">
+          <div class="cover-image">
+            <div class="bg-holder rounded-3 rounded-bottom-0" style="background-image:url({% static 'user_panel/assets/img/generic/4.jpg' %});">
+            </div>
+          </div>
+          <div class="avatar avatar-5xl avatar-profile"><img class="rounded-circle img-thumbnail shadow-sm" src="{% if request.user.image %}{{ request.user.image.url }}{% else %}{% static 'user_panel/user.jpg' %}{% endif %}" width="200" alt="" /></div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-8">
+              <h4 class="mb-1"> {{request.user.username }}<span data-bs-toggle="tooltip" data-bs-placement="right" title="Verified"></span>
+              </h4>
+              <h5 class="fs-0 fw-normal">{{request.user.bio }}</h5>
+              <p class="text-500">{{request.user.email}}</p>
+              <!-- <button class="btn btn-falcon-primary btn-sm px-3" type="button">Following</button>
+              <button class="btn btn-falcon-default btn-sm px-3 ms-2" type="button">Message</button> -->
+              <div class="border-dashed-bottom my-4 d-lg-none"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row g-0">
+    <div class="col-lg-8 pe-lg-2">
+      <div class="card mb-3">
+        <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="card-header">
+          <h5 class="mb-0">Profile Settings</h5>
+        </div>
+        <div class="card-body bg-light">
+            <div class="col-lg-6">
+              <label class="form-label" for="first-name">User Profile</label>
+              <input class="form-control" name="image" id="first-name" type="file" />
+            </div>
+            <div class="col-lg-6">
+              <label class="form-label" for="first-name">User Name</label>
+              <input class="form-control" name="username" id="first-name" type="text" value="{{request.user.username}}" />
+            </div>
+            <div class="col-lg-6">
+              <label class="form-label" for="first-name">First Name</label>
+              <input class="form-control" name="first_name" id="first-name" type="text" value="{{request.user.first_name}}" />
+            </div>
+            <div class="col-lg-6">
+              <label class="form-label" for="last-name">Last Name</label>
+              <input class="form-control" name="last_name" id="last-name" type="text" value="{{request.user.last_name}}" />
+            </div>
+            <div class="col-lg-6">
+              <label class="form-label" for="email1">Email</label>
+              <input class="form-control" name="email" id="email1" type="text" value="{{request.user.email}}" />
+            </div>
+            <div class="col-lg-12">
+              <label class="form-label" for="intro">Bio</label>
+              <textarea class="form-control" id="intro" name="bio" cols="30" rows="13">{{request.user.bio}}</textarea>
+            </div>
+            <div class="col-12 d-flex justify-content-center mt-2">
+              <button class="btn btn-primary" type="submit">Update</button>
+            </div>
+        </div>
+      </form>
+      </div>
+    </div>
+
+  </div>
+
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

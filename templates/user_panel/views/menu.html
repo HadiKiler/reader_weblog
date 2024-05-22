@@ -1,0 +1,199 @@
+{% load static %}
+
+<nav class="navbar navbar-light navbar-vertical navbar-expand-xl">
+    <script>
+      var navbarStyle = localStorage.getItem("navbarStyle");
+      if (navbarStyle && navbarStyle !== 'transparent') {
+        document.querySelector('.navbar-vertical').classList.add(`navbar-${navbarStyle}`);
+      }
+    </script>
+    <div class="d-flex align-items-center">
+      <div class="toggle-icon-wrapper">
+
+        <button class="btn navbar-toggler-humburger-icon navbar-vertical-toggle" data-bs-toggle="tooltip" data-bs-placement="left" title="Toggle Navigation"><span class="navbar-toggle-icon"><span class="toggle-line"></span></span></button>
+
+      </div><a class="navbar-brand" href="index.html">
+        <div class="d-flex align-items-center py-3"><img class="me-2" src="{% static 'user_panel/assets/img/icons/spot-illustrations/falcon.png' %}" alt="" width="40" /><span class="font-sans-serif">falcon</span>
+        </div>
+      </a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+      <div class="navbar-vertical-content scrollbar">
+        <ul class="navbar-nav flex-column mb-3" id="navbarVerticalNav">
+          {% if request.user.is_superuser %}
+          <li class="nav-item">
+            <!-- label-->
+            <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+              <div class="col-auto navbar-vertical-label">Admin
+              </div>
+              <div class="col ps-0">
+                <hr class="mb-0 navbar-vertical-divider" />
+              </div>
+            </div>
+            <!-- parent pages--><a class="nav-link" href="{% url 'user_panel_admin_users' %}" role="button" aria-expanded="false">
+              <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-user"></span></span><span class="nav-link-text ps-1">Users</span>
+              </div>
+            </a>
+            <!-- parent pages--><a class="nav-link" href="{% url 'user_panel_admin_categories' %}" role="button" aria-expanded="false">
+              <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-dice-d20"></span></span><span class="nav-link-text ps-1">Categories</span>
+              </div>
+            </a>
+            <!-- parent pages--><a class="nav-link" href="{% url 'user_panel_admin_tags' %}" role="button" aria-expanded="false">
+              <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-hashtag"></span></span><span class="nav-link-text ps-1">Tags</span>
+              </div>
+            </a>
+            <!-- parent pages--><a class="nav-link" href="{% url 'user_panel_admin_posts' %}" role="button" aria-expanded="false">
+              <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="far fa-newspaper"></span></span><span class="nav-link-text ps-1">Posts</span>
+              </div>
+            </a>
+            <!-- parent pages--><a class="nav-link" href="{% url 'user_panel_admin_comments' %}" role="button" aria-expanded="false">
+              <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-comments"></span></span><span class="nav-link-text ps-1">Comments</span>
+              </div>
+            </a>
+            <!-- parent pages--><a class="nav-link" href="{% url 'user_panel_admin_likes' %}" role="button" aria-expanded="false">
+              <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-heart"></span></span><span class="nav-link-text ps-1">Likes</span>
+              </div>
+            </a>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <!-- label-->
+            <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+              <div class="col-auto navbar-vertical-label">User
+              </div>
+              <div class="col ps-0">
+                <hr class="mb-0 navbar-vertical-divider" />
+              </div>
+            </div>
+            <!-- parent pages--><a class="nav-link" href="{% url 'user_panel_user_profile' %}" role="button" aria-expanded="false">
+              <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="fas fa-user"></span></span><span class="nav-link-text ps-1">Profile</span>
+              </div>
+            </a>
+            <!-- parent pages--><a class="nav-link dropdown-indicator" href="#e-commerce" role="button" data-bs-toggle="collapse" aria-expanded="false" aria-controls="e-commerce">
+              <div class="d-flex align-items-center"><span class="nav-link-icon"><span class="far fa-newspaper"></span></span><span class="nav-link-text ps-1">Post</span>
+              </div>
+            </a>
+            <ul class="nav collapse false" id="e-commerce">
+              <li class="nav-item"><a class="nav-link" href="{% url 'user_panel_user_posts' %}" aria-expanded="false">
+                  <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Posts</span>
+                  </div>
+                </a>
+                <!-- more inner pages-->
+              </li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'user_panel_user_post_create' %}" aria-expanded="false">
+                <div class="d-flex align-items-center"><span class="nav-link-text ps-1">Create Post</span>
+                </div>
+              </a>
+              <!-- more inner pages-->
+              </li>
+            </ul>
+            
+
+          </li>
+          <!-- categorires for admins  -->
+          {% if '/user_panel/admin/posts/'  == request.path %}
+          <li class="nav-item">
+            
+            <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+              <div class="col-auto navbar-vertical-label">Category
+              </div>
+              <div class="col ps-0">
+                <hr class="mb-0 navbar-vertical-divider" />
+              </div>
+            </div>
+            <div class="m-3">
+              <a class="btn btn-primary me-1 mb-1" href="{{ request.path }}">Clear Filters
+              </a>
+            </div>
+              <ul id="myUL">
+                <li>
+                <span class="caret">Categories</span>
+                  <ul class="nested">
+                    {% for category in categories %}
+                    {% if category.parent == None %}
+                      {% if not category.category_set.all %}
+                        <li><a href="{{ request.path }}?cat={{category.id}}">{{ category.name }}</a></li>
+                      {% else %}
+                        <li><span class="caret"><a href="{{ request.path }}?cat={{category.id}}">{{category.name}}</a></span>
+                          <ul class="nested">
+                            {% for subCategory in category.category_set.all %}
+                              {% if not subCategory.category_set.all %}
+                                <li><a href="{{ request.path }}?cat={{subCategory.id}}">{{ subCategory.name }}</a></li>
+                              {% else %}
+                              <li><span class="caret"><a href="{{ request.path }}?cat={{subCategory.id}}">{{subCategory}}</a></span>
+                                <ul class="nested">
+                                  {% for extraCategory in subCategory.category_set.all %}
+                                  <li><a href="{{ request.path }}?cat={{extraCategory.id}}">{{ extraCategory.name }}</a></li>                      
+                                  {% endfor %}
+                                </ul>
+                              </li>
+                              {% endif %}
+                            {% endfor %}
+                          </ul>
+                        </li>
+                      {% endif %}
+                    {% endif %}
+                    {% endfor %}       
+                  </ul>
+                </li>
+              </ul>
+              
+          </li>
+          <!-- end categorires for admins -->    
+
+          <!-- categorires for users -->
+          {% elif '/user_panel/uesr/posts/'  == request.path %}
+          <li class="nav-item">
+            
+            <div class="row navbar-vertical-label-wrapper mt-3 mb-2">
+              <div class="col-auto navbar-vertical-label">Category
+              </div>
+              <div class="col ps-0">
+                <hr class="mb-0 navbar-vertical-divider" />
+              </div>
+            </div>
+            <div class="m-3">
+              <a class="btn btn-primary me-1 mb-1" href="{{ request.path }}">Clear Filters
+              </a>
+            </div>
+              <ul id="myUL">
+                <li>
+                <span class="caret">Categories</span>
+                  <ul class="nested">
+                    {% for category in categories %}
+                    {% if category.parent == None %}
+                      {% if not category.category_set.all %}
+                        <li><a href="{{ request.path }}?cat={{category.id}}">{{ category.name }}</a></li>
+                      {% else %}
+                        <li><span class="caret"><a href="{{ request.path }}?cat={{category.id}}">{{category.name}}</a></span>
+                          <ul class="nested">
+                            {% for subCategory in category.category_set.all %}
+                              {% if not subCategory.category_set.all %}
+                                <li><a href="{{ request.path }}?cat={{subCategory.id}}">{{ subCategory.name }}</a></li>
+                              {% else %}
+                              <li><span class="caret"><a href="{{ request.path }}?cat={{subCategory.id}}">{{subCategory}}</a></span>
+                                <ul class="nested">
+                                  {% for extraCategory in subCategory.category_set.all %}
+                                  <li><a href="{{ request.path }}?cat={{extraCategory.id}}">{{ extraCategory.name }}</a></li>                      
+                                  {% endfor %}
+                                </ul>
+                              </li>
+                              {% endif %}
+                            {% endfor %}
+                          </ul>
+                        </li>
+                      {% endif %}
+                    {% endif %}
+                    {% endfor %}       
+                  </ul>
+                </li>
+              </ul>
+              
+          </li>
+          {% endif %}
+          <!-- end categorires for users -->
+         
+        </ul>
+      </div>
+    </div>
+  </nav>

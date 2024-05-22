@@ -1,0 +1,78 @@
+{% extends 'user_panel/views/base.html' %}
+
+
+{% load static %}
+
+{% block css %}
+<link href="{% static 'user_panel/vendors/choices/choices.min.css' %}" rel="stylesheet" />
+<style>
+    .subCategory{
+        padding-left: 40px !important;
+    }
+    .extraCategory{
+        padding-left: 80px !important;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="card-body position-relative">
+    <div class="row g-0">
+        <div class="col-lg-8 pe-lg-2">
+          <div class="card mb-3">
+            <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="card-header">
+              <h5 class="mb-0">Create Tag</h5>
+            </div>
+            <div class="card-body bg-light">
+                <div class="col-lg-12 pt-2">
+                    <label class="form-label" for="first-name">Name</label>
+                    <input class="form-control" required name="name" id="first-name" type="text" />
+                  </div>
+                <div class="col-12 d-flex justify-content-center mt-2">
+                  <button class="btn btn-primary" type="submit">Create</button>
+                </div>
+            </div>
+          </form>
+          </div>
+        </div>
+    
+      </div>
+    
+</div>
+
+
+
+<div class="table-responsive scrollbar">
+    <table class="table table-bordered border">
+      <thead>
+        <tr>
+
+            <th scope="col">Name</th>
+          <th class="text-end" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tag in tags %}
+            <tr>
+            <td>{{tag.name}}</td>
+            <td class="text-end">
+                <div>
+                <a href="{% url 'user_panel_admin_tag_edit' tag.id %}"><button class="btn p-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><span class="text-500 fas fa-edit"></span></button></a>
+                <a href="{% url 'user_panel_admin_tag_delete' tag.id %}"><button  class="btn p-0 ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><span class="text-500 fas fa-trash-alt"></span></button></a>
+                </div>
+            </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endblock %}
+
+
+{% block js %}
+<script src="{% static 'user_panel/vendors/choices/choices.min.js' %}"></script>
+{% endblock %}

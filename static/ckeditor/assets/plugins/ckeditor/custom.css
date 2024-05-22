@@ -1,0 +1,82 @@
+.select2-selection.select2-selection--single {
+    background-color: white;
+}
+
+.ck-editor__editable[role="textbox"] {
+    /* editing area */
+    min-height: 500px;
+}
+
+.ck-content .image {
+    /* block images */
+    max-width: 80%;
+    margin: 20px auto;
+}
+
+/* header */
+
+.ck .ck-toolbar {
+    background-color: rgba(35, 46, 60, 0.25) !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.ck.ck-button.ck-button_with-text, a.ck.ck-button.ck-button_with-text {
+    color: white !important;
+    background-color: rgba(35, 46, 60, 0.25);
+}
+
+/* separators */
+.ck .ck-toolbar__separator {
+    border-left: 1px solid #40405c !important;
+}
+
+/* buttons */
+.ck-rounded-corners .ck.ck-button, .ck-rounded-corners a.ck.ck-button, .ck.ck-button.ck-rounded-corners, a.ck.ck-button.ck-rounded-corners,
+.ck.ck-toolbar[dir="rtl"]:not(.ck-toolbar_compact) > .ck-toolbar__items > .ck, [dir="rtl"] .ck.ck-toolbar:not(.ck-toolbar_compact) > .ck-toolbar__items > .ck {
+    /*border: 1pt solid rgba(255, 255, 255, 0.09);*/
+    /*border-radius: 3px;*/
+    color: white;
+}
+
+/* buttons on hover */
+.ck.ck-button.ck-off.ck-button_with-text.ck-dropdown__button:hover,
+.ck.ck-splitbutton.ck-dropdown__button:hover > *,
+.ck.ck-dropdown.ck-heading-dropdown:hover *,
+.ck.ck-button.ck-off:hover {
+    color: #6c5ffc !important;
+}
+
+
+.ck.ck-button:not(.ck-disabled):hover, a.ck.ck-button:not(.ck-disabled):hover,
+.ck.ck-button.ck-on, a.ck.ck-button.ck-on,
+.ck.ck-dropdown:hover {
+    background-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+.ck.ck-button.ck-off.ck-splitbutton__action:hover,
+.ck.ck-button.ck-off.ck-splitbutton__arrow:hover {
+    background-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+.ck.ck-splitbutton.ck-splitbutton_open > .ck-button:not(.ck-on):not(.ck-disabled):not(:hover),
+.ck.ck-splitbutton:hover > .ck-button:not(.ck-on):not(.ck-disabled):not(:hover) {
+    background-color: rgba(255, 255, 255, 0.09) !important;
+}
+
+
+.ck.ck-toolbar > .ck-toolbar__items {
+    background-color: rgba(35, 46, 60, 0.25);
+    border: 1px solid #40405c !important;
+}
+
+
+.ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
+    background-color: rgba(35, 46, 60, 0.25);
+    border: 1px solid #40405c !important;
+}
+
+.ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable, .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+    background-color: rgba(35, 46, 60, 0.25);
+    border: 1px solid #40405c !important;
+}

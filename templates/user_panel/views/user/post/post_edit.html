@@ -1,0 +1,220 @@
+{% extends 'user_panel/views/base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'ckeditor/assets/plugins/ckeditor/custom.css' %}" type="text/css" />
+<link href="{% static 'user_panel/vendors/choices/choices.min.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+
+<div class="card mb-3">
+    <div class="bg-holder d-none d-lg-block bg-card" style="background-image:url({% static 'user_panel/assets/img/icons/spot-illustrations/corner-4.png' %});">
+    </div>
+    <div class="card-body position-relative">
+      <div class="row">
+        <div class="col-lg-8">
+          <h3>CK Editor</h3>
+          <p class="mt-2">Falcon uses Tinymce, the world's most popular JavaScript library for rich text editing.</p><a class="btn btn-link ps-0 btn-sm" href="" target="_blank"> Tinymce documentations<span class="fas fa-chevron-right ms-1 fs--2"></span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card mb-3">
+    <div class="card-header">
+      <div class="row flex-between-end">
+        <div class="col-auto align-self-center">
+          <h5 class="mb-0" data-anchor="data-anchor">Create your post here.</h5>
+        </div>
+      </div>
+    </div>
+    <div class="card-body bg-light">
+      <div class="min-vh-50">
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Title -->
+            <div class="mb-3">
+                <label class="form-label" for="exampleFormControlInput1">Title</label>
+                <input class="form-control" required  name="title" id="exampleFormControlInput1" type="text" placeholder="" value="{{ post.title }}"/>
+            </div>
+            <!-- Category -->
+            <div class="mb-3">
+                <label for="organizerSingle">Category</label>
+                <select class="form-select" required id="organizerSingle" size="1" name="category" data-options='{"removeItemButton":true,"placeholder":true}'>
+                {% for category in categories %}
+                    <option value="{{category.id}}" {% if post.category == category %}selected{% endif %}>{{category.name}}</option>
+                    {% for subCategory in category.category_set.all %}
+                        <option value="{{subCategory.id}}" {% if post.category == subCategory %}selected{% endif %}> > {{subCategory.name}}</option>
+                        {% for extraCategory in subCategory.category_set.all %}
+                            <option value="{{extraCategory.id}}" {% if post.category == extraCategory %}selected{% endif %}> > > {{extraCategory.name}}</option>
+                        {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+                </select>
+            </div>
+            <!-- Image -->
+            <div class="mb-5">
+                <label class="form-label" for="customFile">Choose Image</label>
+                <input class="form-control"  name="image" id="customFile" type="file" value="{{post.image}}"/>
+            </div>
+            <!-- content -->
+            <div class="mb-3">
+                <textarea name="content"  id="content" cols="30" rows="10">{{post.content}}</textarea>                
+            </div>
+            <!-- Tags -->
+            <div class="mb-4">
+                <label for="organizerMultiple">Select Tag</label>
+                <select class="form-select js-choice" id="organizerMultiple" multiple="multiple" size="1" name="tag" data-options='{"removeItemButton":true,"placeholder":true}'>
+                {% for tag in tags %}
+                    <option value="{{tag.id}}" {% if tag in post.tags.all %}selected{% endif %}>{{tag.name}}</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" name="published" id="flexCheckChecked" type="checkbox" {% if post.published %}checked{% endif %} />
+                <label class="form-check-label" for="flexCheckChecked">Publish</label>
+              </div>
+            <div class="mb-3 text-center">
+                <input class="btn btn-primary me-1 mb-1" type="submit" value="Submit">
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
+
+{% block js %}
+<script src="{% static 'user_panel/vendors/choices/choices.min.js' %}"></script>
+<script src="{% static 'ckeditor/assets/plugins/jquery-form-validator/jquery.validate.js' %}"></script>
+    <!-- FILE UPLOADS JS -->
+<script src="{% static 'ckeditor/assets/plugins/fileuploads/js/fileupload.js' %}"></script>
+<script src="{% static 'ckeditor/assets/plugins/fileuploads/js/file-upload.js' %}"></script>
+
+<!-- CKEDITOR SUPER BUILD -->
+<script type="text/javascript" src="{% static 'ckeditor/assets/plugins/ckeditor/ckeditor-superbuild.js' %}"></script>
+
+
+<script>
+  CKEDITOR.ClassicEditor.create(document.getElementById("content"), {
+          toolbar: {
+              items: [
+                  'exportPDF', 'exportWord', '|',
+                  'findAndReplace', 'selectAll', '|',
+                  'heading', '|',
+                  'bold', 'italic', 'strikethrough', 'underline', 'code', 'subscript', 'superscript', 'removeFormat', '|',
+                  'bulletedList', 'numberedList', 'todoList', '|',
+                  'outdent', 'indent', '|',
+                  'undo', 'redo',
+                  '-',
+                  'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                  'alignment', '|',
+                  'link', 'insertImage', 'blockQuote', 'insertTable', 'mediaEmbed', 'codeBlock', 'htmlEmbed', '|',
+                  'specialCharacters', 'horizontalLine', 'pageBreak', '|',
+                  'textPartLanguage', '|',
+                  'sourceEditing'
+              ],
+              shouldNotGroupWhenFull: true
+          },
+          language: {
+              ui: 'en',
+              content: 'en'
+          },
+          list: {
+              properties: {
+                  styles: true,
+                  startIndex: true,
+                  reversed: true
+              }
+          },
+          heading: {
+              options: [
+                  {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
+                  {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
+                  {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
+                  {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'},
+                  {model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4'},
+                  {model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5'},
+                  {model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6'}
+              ]
+          },
+          placeholder: '',
+          fontFamily: {
+              options: [
+                  'default',
+                  'Arial, Helvetica, sans-serif',
+                  'Courier New, Courier, monospace',
+                  'Georgia, serif',
+                  'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                  'Tahoma, Geneva, sans-serif',
+                  'Times New Roman, Times, serif',
+                  'Trebuchet MS, Helvetica, sans-serif',
+                  'Verdana, Geneva, sans-serif'
+              ],
+              supportAllValues: true
+          },
+          fontSize: {
+              options: [10, 12, 14, 'default', 18, 20, 22, 23, 24, 25, 26, 27],
+              supportAllValues: true
+          },
+          htmlSupport: {
+              allow: [
+                  {
+                      name: /.*/,
+                      attributes: true,
+                      classes: true,
+                      styles: true
+                  }
+              ]
+          },
+          htmlEmbed: {
+              showPreviews: true
+          },
+          link: {
+              decorators: {
+                  addTargetToExternalLinks: true,
+                  defaultProtocol: 'https://',
+                  toggleDownloadable: {
+                      mode: 'manual',
+                      label: 'Downloadable',
+                      attributes: {
+                          download: 'file'
+                      }
+                  }
+              }
+          },
+          mention: {
+              feeds: [
+                  {
+                      marker: '@',
+                      feed: [
+                          '@apple', '@bears', '@brownie', '@cake', '@cake', '@candy', '@canes', '@chocolate', '@cookie', '@cotton', '@cream',
+                          '@cupcake', '@danish', '@donut', '@dragée', '@fruitcake', '@gingerbread', '@gummi', '@ice', '@jelly-o',
+                          '@liquorice', '@macaroon', '@marzipan', '@oat', '@pie', '@plum', '@pudding', '@sesame', '@snaps', '@soufflé',
+                          '@sugar', '@sweet', '@topping', '@wafer'
+                      ],
+                      minimumCharacters: 1
+                  }
+              ]
+          },
+          removePlugins: [
+              'CKBox',
+              'CKFinder',
+              'EasyImage',
+              'RealTimeCollaborativeComments',
+              'RealTimeCollaborativeTrackChanges',
+              'RealTimeCollaborativeRevisionHistory',
+              'PresenceList',
+              'Comments',
+              'TrackChanges',
+              'TrackChangesData',
+              'RevisionHistory',
+              'Pagination',
+              'WProofreader',
+              'MathType'
+          ]
+      });
+</script>
+{% endblock %}

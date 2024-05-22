@@ -1,0 +1,112 @@
+{% extends 'user_panel/views/base.html' %}
+
+
+{% load static %}
+
+{% block css %}
+<link href="{% static 'user_panel/vendors/choices/choices.min.css' %}" rel="stylesheet" />
+<style>
+    .subCategory{
+        padding-left: 40px !important;
+    }
+    .extraCategory{
+        padding-left: 80px !important;
+    }
+
+  /* Remove default bullets */
+ul, #myUL {
+  list-style-type: none;
+}
+
+/* Remove margins and padding from the parent ul */
+#myUL {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the caret/arrow */
+.caret {
+  cursor: pointer;
+  user-select: none; /* Prevent text selection */
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.caret::before {
+  content: "\25B6";
+  color: black;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+  transform: rotate(90deg);
+}
+
+/* Hide the nested list */
+.nested {
+  display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+  display: block;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="table-responsive scrollbar">
+    <table class="table table-bordered border">
+      <thead>
+        <tr>
+          <th scope="col">User</th>
+          <th scope="col">Category</th>
+          <th scope="col">Title</th>
+          <th scope="col">Image</th>
+          <th scope="col">Tags</th>
+          <th scope="col">Created At</th>
+          <th scope="col">published</th>
+          <th class="text-end" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for post in posts %}
+            <tr style="vertical-align: middle;">
+            <td>{{post.user.username}}</td>
+            <td>{{post.category.name}}</td>
+            <td>{{post.title}}</td>
+            <td><img src="{{post.image.url}}" style="width:100px;height:70px;" alt=""></td>
+            <td>{% for tag in post.tags.all %}{{tag}},{% endfor %}</td>
+            <td>{{post.created_at}}</td>
+            <td>{{post.published}}</td>
+            <td class="text-end p-1">
+                <div class="d-flex justify-content-around">
+                <a href="" style="margin-right: 5px;"><button class="btn p-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><span class="text-500 far fa-eye"></span></button></a>
+                <a href="{% url 'user_panel_admin_post_edit' post.id %}"><button class="btn p-0" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"><span class="text-500 fas fa-edit"></span></button></a>
+                <a href="{% url 'user_panel_admin_post_delete' post.id %}"><button  style="margin-left: 0px !important;" class="btn p-0 ms-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete"><span class="text-500 fas fa-trash-alt"></span></button></a>
+                </div>
+            </td>
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endblock %}
+
+
+{% block js %}
+<script src="{% static 'user_panel/vendors/choices/choices.min.js' %}"></script>
+<script>
+var toggler = document.getElementsByClassName("caret");
+var i;
+
+for (i = 0; i < toggler.length; i++) {
+  toggler[i].addEventListener("click", function() {
+    this.parentElement.querySelector(".nested").classList.toggle("active");
+    this.classList.toggle("caret-down");
+  });
+}
+</script>
+{% endblock %}
