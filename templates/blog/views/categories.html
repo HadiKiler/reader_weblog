@@ -24,7 +24,7 @@
           <ul class="card-meta list-inline">
             <li class="list-inline-item">
               <a href="" class="card-meta-author">
-                <img style="height: 30px;width: 30px;" src="{{post.user.image.url}}">
+                <img style="height: 30px;width: 30px;" src="{% if post.user.image %}{{ post.user.image.url }}{% else %}{% static 'blog/images/user.jpg' %}{% endif %}">
                 <span>{{post.user.username}}</span>
               </a>
             </li>
