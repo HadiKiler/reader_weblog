@@ -95,9 +95,21 @@
         <h4 class="widget-title"><span>Categories</span></h4>
         <ul class="list-unstyled widget-list">
         {% for category in categories %}
+        {% if not category.parent %}
           <li style="{% if category.id == active_cat %}font-weight: bolder;{% endif %}"><a href="{{request.path}}?search={{search}}&cat={{category.id}}&tag={{active_tag}}">
             {{category.name}} <small class="ml-auto">({{category.post_set.all | length}})</small>
           </a></li>
+          {% for secondCategory in category.category_set.all %}
+            <li style="{% if secondCategory.id == active_cat %}font-weight: bolder;{% endif %}"><a href="{{request.path}}?search={{search}}&cat={{secondCategory.id}}&tag={{active_tag}}">
+              - {{secondCategory.name}} <small class="ml-auto">({{secondCategory.post_set.all | length}})</small>
+            </a></li>
+            {% for thirdCategory in secondCategory.category_set.all %}
+              <li style="{% if thirdCategory.id == active_cat %}font-weight: bolder;{% endif %}"><a href="{{request.path}}?search={{search}}&cat={{thirdCategory.id}}&tag={{active_tag}}">
+                - - {{thirdCategory.name}} <small class="ml-auto">({{thirdCategory.post_set.all | length}})</small>
+              </a></li>
+            {% endfor %}
+          {% endfor %}
+        {% endif %}
         {% endfor %}
         </ul>
       </div><!-- tags -->
