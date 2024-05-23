@@ -83,7 +83,7 @@
               <ul class="card-meta list-inline">
                 <li class="list-inline-item">
                   <a href="" class="card-meta-author">
-                    <img src="{% if controversial_post.user.image %}{{ controversial_post.user.image.url }}{% else %}{% static 'blog/images/user.jpg' %}{% endif %}">
+                    <img style="width: 30px;height: 30px;" src="{% if controversial_post.user.image %}{{ controversial_post.user.image.url }}{% else %}{% static 'blog/images/user.jpg' %}{% endif %}">
                     <span>{{ controversial_post.user.username }}</span>
                   </a>
                 </li>
@@ -146,7 +146,7 @@
               <ul class="card-meta list-inline">
                 <li class="list-inline-item">
                   <a href="" class="card-meta-author">
-                    <img src="{% if popular_post.user.image %}{{ popular_post.user.image.url }}{% else %}{% static 'blog/images/user.jpg' %}{% endif %}" alt="{{ popular_post.user.username }}">
+                    <img style="width: 30px;height: 30px;" src="{% if popular_post.user.image %}{{ popular_post.user.image.url }}{% else %}{% static 'blog/images/user.jpg' %}{% endif %}" alt="{{ popular_post.user.username }}">
                     <span>{{ popular_post.user.username }}</span>
                   </a>
                 </li>
@@ -195,7 +195,7 @@
         <ul class="card-meta list-inline">
         <li class="list-inline-item">
             <a href="" class="card-meta-author">
-            <img src="{% if random.user.image %}{{ random.user.image.url }}{% else %}{% static 'blog/images/user.jpg' %}{% endif %}">
+            <img style="width: 30px;height: 30px;" src="{% if random.user.image %}{{ random.user.image.url }}{% else %}{% static 'blog/images/user.jpg' %}{% endif %}">
             <span>{{random.user.username}}</span>
             </a>
         </li>
