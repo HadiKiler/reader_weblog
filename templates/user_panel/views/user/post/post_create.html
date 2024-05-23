@@ -4,6 +4,14 @@
 {% block css %}
 <link rel="stylesheet" href="{% static 'ckeditor/assets/plugins/ckeditor/custom.css' %}" type="text/css" />
 <link href="{% static 'user_panel/vendors/choices/choices.min.css' %}" rel="stylesheet" />
+<style>
+    .content .navbar{
+        z-index: 1;
+    }
+    .navbar-brand{
+        display: none !important;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
