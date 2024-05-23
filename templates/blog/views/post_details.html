@@ -48,7 +48,7 @@
               {% if not comment.parent %}
               <div id="comment{{comment.id}}" class="media d-block d-sm-flex my-4 pb-4">
                   <a class="media d-block d-sm-flex mb-4 pb-4" href="#">
-                      <img width="60px" height="60px" src="{% if comment.user %}{{comment.user.image.url}}{% else %}{% static 'blog/images/user.jpg'%}{% endif%}" class="mr-3 rounded-circle" alt="">
+                      <img width="60px" height="60px" src="{% if comment.user and comment.user.image %}{{comment.user.image.url}}{% else %}{% static 'blog/images/user.jpg'%}{% endif%}" class="mr-3 rounded-circle" alt="">
                   </a>
                   <div class="media-body w-100">
                       <a href="" class="h4 d-inline-block mb-3">{{comment.user.username}}{{comment.name}}</a>
@@ -84,7 +84,7 @@
                           <div class="media d-block d-sm-flex mb-4 pb-4" href="#">
                               <img class="mr-3" src="{% static 'blog/images/post/arrow.png' %}" alt="">
                               <a class="d-inline-block mr-2 mb-3 mb-md-0" href="#!">
-                                <img width="60px" height="60px" src="{% if secondComment.user %}{{secondComment.user.image.url}}{% else %}{% static 'blog/images/user.jpg'%}{% endif%}" class="mr-3 rounded-circle" alt="">
+                                <img width="60px" height="60px" src="{% if secondComment.user and secondComment.user.image %}{{secondComment.user.image.url}}{% else %}{% static 'blog/images/user.jpg'%}{% endif%}" class="mr-3 rounded-circle" alt="">
                               </a>
                           </div>
                           <div class="media-body w-100">
@@ -121,7 +121,7 @@
                                   <div class="media d-block d-sm-flex mb-4 pb-4" href="#">
                                       <img class="mr-3 ml-5" src="{% static 'blog/images/post/arrow.png' %}" alt="">
                                       <a class="d-inline-block mr-2 mb-3 mb-md-0" href="#!">
-                                        <img width="60px" height="60px" src="{% if thiredComment.user %}{{thiredComment.user.image.url}}{% else %}{% static 'blog/images/user.jpg'%}{% endif%}" class="mr-3 rounded-circle" alt="">
+                                        <img width="60px" height="60px" src="{% if thiredComment.user and thiredComment.user.image %}{{thiredComment.user.image.url}}{% else %}{% static 'blog/images/user.jpg'%}{% endif%}" class="mr-3 rounded-circle" alt="">
                                       </a>
                                   </div>
                                   <div class="media-body w-100">
