@@ -17,7 +17,7 @@
           <ul class="card-meta my-3 list-inline">
             <li class="list-inline-item">
               <a href="" class="card-meta-author">
-                <img style="width: 40px;height: 40px;" src="{{% if post.user.image %}{{ post.user.image.url }}{% else %}{% static 'blog/images/user.jpg' %}{% endif %}">
+                <img style="width: 40px;height: 40px;" src="{% if post.user.image %}{{ post.user.image.url }}{% else %}{% static 'blog/images/user.jpg' %}{% endif %}">
                 <span>{{post.user.username}}</span>
               </a>
             </li>
@@ -46,7 +46,7 @@
 
               {% for comment in post.comment_set.all %}
               {% if not comment.parent %}
-              <div class="media d-block d-sm-flex my-4 pb-4">
+              <div id="comment{{comment.id}}" class="media d-block d-sm-flex my-4 pb-4">
                   <a class="media d-block d-sm-flex mb-4 pb-4" href="#">
                       <img width="60px" height="60px" src="{% if comment.user %}{{comment.user.image.url}}{% else %}{% static 'blog/images/user.jpg'%}{% endif%}" class="mr-3 rounded-circle" alt="">
                   </a>
@@ -80,7 +80,7 @@
                 </form>
               </div>
                       {% for secondComment in comment.comment_set.all %}
-                      <div class="media d-block d-sm-flex mb-4 pb-4">
+                      <div id="comment{{secondComment.id}}" class="media d-block d-sm-flex mb-4 pb-4">
                           <div class="media d-block d-sm-flex mb-4 pb-4" href="#">
                               <img class="mr-3" src="{% static 'blog/images/post/arrow.png' %}" alt="">
                               <a class="d-inline-block mr-2 mb-3 mb-md-0" href="#!">
@@ -117,7 +117,7 @@
                         </form>
                       </div>
                               {% for thiredComment in secondComment.comment_set.all %}
-                              <div class="media d-block d-sm-flex pl-3">
+                              <div id="comment{{thiredComment.id}}" class="media d-block d-sm-flex pl-3">
                                   <div class="media d-block d-sm-flex mb-4 pb-4" href="#">
                                       <img class="mr-3 ml-5" src="{% static 'blog/images/post/arrow.png' %}" alt="">
                                       <a class="d-inline-block mr-2 mb-3 mb-md-0" href="#!">
@@ -213,5 +213,17 @@
       document.getElementById('reply'+e.target.id).classList.remove('d-none')
     })
   })
+
+
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  window.addEventListener("DOMContentLoaded", async e=> {
+    if (document.URL.includes('comment')){
+      await sleep(0)
+      window.scrollTo(0, (document.documentElement.scrollTop || document.body.scrollTop) - 200);
+    }
+  });
 </script>
 {% endblock content %}
