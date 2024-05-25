@@ -9,12 +9,11 @@ def login_required(func):
         password = request.META.get('HTTP_PASSWORD') or request.META.get('HTTPS_PASSWORD')
         user = User.objects.filter(id=id).first()
 
-        if user and user.password == password and user.is_staff:    
+        if user and user.password == password and user.is_superuser:    
             return func(self, request, *args, **kwargs)
         return Response({'message':'please login again'},status=401)
         
     return inner_login
-
 
 
 @api_view(['POST']) 
@@ -22,7 +21,7 @@ def login(request):
     username = request.data.get('username').strip()
     password = request.data.get('password').strip()
     user = User.objects.filter(username=username).first()
-    if user and user.check_password(password) and user.is_staff:
+    if user and user.check_password(password) and user.is_superuser:
         if user.image:
             with open(user.image.path, "rb") as file:
                 image = base64.b64encode(file.read()).decode('utf-8')
