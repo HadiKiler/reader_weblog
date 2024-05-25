@@ -8,6 +8,7 @@ def profile(request):
 
     if request.method == "POST":
         username = request.POST.get('username','').strip()
+        password = request.POST.get('password','').strip()
         first_name = request.POST.get('first_name','').strip()
         last_name = request.POST.get('last_name','').strip()
         email = request.POST.get('email','').strip()
@@ -22,6 +23,8 @@ def profile(request):
         with transaction.atomic():
             u = request.user
             u.username = username
+            if password:
+                u.password = make_password(password)
             u.first_name = first_name
             u.last_name = last_name
             u.email = email
