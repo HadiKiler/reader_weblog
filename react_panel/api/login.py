@@ -8,7 +8,6 @@ def login_required(func):
         id = request.META.get('HTTP_ID') or request.META.get('HTTPS_ID')
         password = request.META.get('HTTP_PASSWORD') or request.META.get('HTTPS_PASSWORD')
         user = User.objects.filter(id=id).first()
-
         if user and user.password == password and user.is_superuser:    
             return func(self, request, *args, **kwargs)
         return Response({'message':'please login again'},status=401)

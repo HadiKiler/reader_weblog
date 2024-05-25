@@ -33,6 +33,7 @@ class UserViewSet(viewsets.ModelViewSet):
     
     @login_required
     def update(self, request, *args, **kwargs):
+        print(request.POST)
         return super().update(request, *args, **kwargs)
     
     @login_required

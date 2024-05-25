@@ -33,7 +33,7 @@ class UserSerializer(ModelSerializer):
         'image',
         'bio',
         'email',
-        'is_staff'
+        'is_superuser'
         ]
     
     def create(self, validated_data):
